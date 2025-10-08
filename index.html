@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rental Booking — Web App (No Backend)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">RB</div>
+    <div class="titles">
+      <h1>Rental Booking</h1>
+      <p class="subtitle">Free, web-based, no backend — runs in your browser</p>
+    </div>
+    <nav class="top-nav">
+      <button class="nav-btn" data-page="collection">Collection</button>
+      <button class="nav-btn" data-page="selector">Selector</button>
+      <button class="nav-btn" data-page="cart">Cart <span id="cartCount">0</span></button>
+      <button class="nav-btn" data-page="bookings">Bookings</button>
+      <button class="nav-btn" data-page="pickreturn">Pick/Return</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- COLLECTION -->
+    <section id="page-collection" class="page hidden">
+      <div class="toolbar">
+<button id="btnImportProducts" class="btn outline">Import Products</button>
+<input type="file" id="fileImportProducts" accept=".csv" hidden>
+<button id="btnExportProducts" class="btn outline">Export Products</button>
+<button id="btnImportZip" class="btn outline">Import ZIP (CSV + images)</button>
+<input type="file" id="fileImportZip" accept=".zip" hidden>
+
+        <div class="left">
+          <input id="searchProduct" placeholder="Search name or code" />
+          <select id="filterCategory">
+            <option value="">All categories</option>
+            <option>Lehenga</option>
+            <option>Jewellery</option>
+          </select>
+          <select id="filterStatus">
+            <option value="">All status</option>
+            <option>In store</option>
+            <option>Out on rent</option>
+            <option>Maintenance</option>
+          </select>
+        </div>
+        <div class="right">
+          <button id="btnAddProduct" class="primary">Add Product</button>
+        </div>
+      </div>
+      <div id="productList" class="grid"></div>
+    </section>
+
+    <!-- SELECTOR -->
+    <section id="page-selector" class="page hidden">
+      <div class="toolbar">
+        <div class="left">
+          <button id="btnNewBooking" class="primary">New Booking</button>
+        </div>
+        <div class="right dates">
+          <label>Pickup <input type="date" id="selPickup"></label>
+          <label>Return <input type="date" id="selReturn"></label>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <input id="searchSelector" placeholder="Search name / code or scan" />
+        <button id="btnScan" title="Mock scan">Scan</button>
+      </div>
+
+      <div class="cart-mini">
+        <strong>Cart preview</strong>
+        <ul id="miniCart"></ul>
+  <div style="margin-top:8px;text-align:right">
+    <button id="miniGoToCart" class="primary">Go to Cart</button>
+  </div>
+      </div>
+
+      <div id="selectorResults" class="grid"></div>
+
+      <div class="footer-cta">
+        <button class="primary" id="goToCart">Go to Cart</button>
+      </div>
+    </section>
+
+    <!-- CART -->
+    <section id="page-cart" class="page hidden">
+      <div class="toolbar">
+        <h2>Cart — Booking Draft</h2>
+        <button id="btnCartReset" class="danger outline">Reset</button>
+      </div>
+      <div id="cartItems"></div>
+
+      <div class="billing">
+        <h3>Billing</h3>
+        <div class="form-grid">
+          <label>Billing Date <input type="date" id="billDate"></label>
+          <label>Customer Name* <input id="custName" maxlength="60"></label>
+          <label>Mobile* (10 digits) <input id="custMobile" maxlength="10" pattern="\d{10}"></label>
+          <label>Address <input id="custAddr" maxlength="200"></label>
+          <label>Discount <input id="discount" type="number" min="0" step="1" placeholder="0"></label>
+          <label>Advance <input id="advance" type="number" min="0" step="1" placeholder="0"></label>
+          <label>Payment Mode
+            <select id="payMode">
+              <option>UPI</option>
+              <option>Cash</option>
+            </select>
+          </label>
+          <label>Remark/Note <input id="remark" maxlength="200"></label>
+        </div>
+
+        <div id="priceSummary" class="summary">
+          <div><span>Total</span><strong id="sumTotal">₹0</strong></div>
+          <div><span>Final</span><strong id="sumFinal">₹0</strong></div>
+          <div><span>Due</span><strong id="sumDue">₹0</strong></div>
+        </div>
+
+        <div class="footer-cta">
+          <button class="primary" id="generateBill">Generate Bill</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOOKINGS -->
+    <section id="page-bookings" class="page hidden">
+      <div class="toolbar">
+        <input id="searchBooking" placeholder="Search booking ID / name / mobile" />
+      </div>
+      <div id="bookingList" class="list"></div>
+    </section>
+
+    <!-- PICK/RETURN -->
+    <section id="page-pickreturn" class="page hidden">
+      <div class="toolbar">
+        <label>Day <input type="date" id="prDate"></label>
+        <div class="tabs">
+          <button class="tab active" data-tab="pickups">Pickups</button>
+          <button class="tab" data-tab="returns">Returns</button>
+        </div>
+      </div>
+      <div class="two-col">
+        <div>
+          <h3>Pickups</h3>
+          <div id="pickupsUrgent" class="urgent"></div>
+          <div id="pickupsList" class="list"></div>
+        </div>
+        <div>
+          <h3>Returns</h3>
+          <div id="returnsUrgent" class="urgent"></div>
+          <div id="returnsList" class="list"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modals -->
+  <dialog id="productForm">
+    <form method="dialog" class="dialog-form" id="productFormForm">
+      <h3 id="pfTitle">Add Product</h3>
+      <label>Photo <input type="file" id="pfPhoto" accept="image/*" /></label>
+      <label>SKU / Code* <input id="pfCode" required /></label>
+      <label>Name* <input id="pfName" required /></label>
+      <label>Category*
+        <div class="radio-row">
+          <label><input type="radio" name="pfCategory" value="Lehenga" id="pfCatLehenga" checked> Lehenga</label>
+          <label><input type="radio" name="pfCategory" value="Jewellery" id="pfCatJewellery"> Jewellery</label>
+        </div>
+      </label>
+      <label>Per-day rent price* <input id="pfPrice" type="number" min="0" step="1" required /></label>
+      <label>Size <input id="pfSize" placeholder="Optional (not for Jewellery)" /></label>
+      <div class="dialog-actions">
+        <button id="pfCancel" value="cancel" type="button">Cancel</button>
+        <button class="primary" value="ok" type="button" id="pfSave">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="warnModal">
+    <div id="warnText">Warning text</div>
+    <div class="dialog-actions">
+      <button id="warnCancel">Cancel</button>
+      <button id="warnOk" class="warn">Proceed</button>
+    </div>
+  </dialog>
+
+  <dialog id="pinModal">
+    <h3>Manager/Owner PIN required</h3>
+    <input id="pinInput" type="password" placeholder="Enter PIN" />
+    <div class="dialog-actions">
+      <button id="pinCancel">Cancel</button>
+      <button id="pinOk" class="primary">Continue</button>
+    </div>
+  </dialog>
+
+  <dialog id="bookingDetail">
+    <div id="bookingDetailContent"></div>
+    <div class="dialog-actions">
+      <button id="bdClose" class="btn">Close</button>
+    </div>
+  </dialog>
+
+  <dialog id="pickupModal">
+    <form method="dialog" class="dialog-form" id="pickupForm">
+      <h3>Confirm Pickup</h3>
+      <p>Enter collector name, optionally collect due, and upload at least one photo.</p>
+      <label>Collector Name <input id="pickupCollector" required></label>
+      <div class="row" style="justify-content:flex-start;gap:12px">
+        <label>Due Now <input id="pickupDueNow" type="number" min="0" step="1" value="0" style="width:120px"></label>
+        <button type="button" id="pickupCollectBtn" class="btn">Collect</button>
+        <span id="pickupCollectedDisplay" style="margin-left:8px;font-weight:600"></span>
+        <span id="pickupDueHint" class="muted"></span>
+      </div>
+      <label>Pickup Photos (min 1) <input type="file" id="pickupPhotos" accept="image/*" multiple></label>
+      <div class="dialog-actions">
+        <button id="pickupCancel" class="btn">Cancel</button>
+        <button id="pickupOk" class="primary" data-action="confirm-pickup">Confirm Pickup</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="returnModal">
+    <form method="dialog" class="dialog-form" id="returnForm">
+      <h3>Finalize Return</h3>
+      <div id="returnPickupPhotos" class="photo-row"></div>
+      <p>Mark condition and optionally upload return photos.</p>
+      <label>Return Condition
+        <div class="radio-row">
+          <label><input type="radio" name="returnCondition" value="ok" checked> OK</label>
+          <label><input type="radio" name="returnCondition" value="damaged"> Damaged</label>
+        </div>
+      </label>
+      <label>Remark (if damaged) <input id="returnRemark" placeholder="Optional"></label>
+      <label>Return Photos <input type="file" id="returnPhotos" accept="image/*" multiple></label>
+      <div class="dialog-actions">
+        <button id="returnCancel" class="btn">Cancel</button>
+        <button id="returnOk" class="primary" data-action="finalize-return">Finalize</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Lightbox for viewing uploaded photos -->
+  <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);align-items:center;justify-content:center;z-index:9999">
+    <div class="close" id="lightboxClose" style="position:absolute;top:18px;right:18px;background:#fff;border-radius:999px;padding:6px 8px;cursor:pointer">✕</div>
+    <img id="lightboxImg" src="" alt="" style="max-width:95%;max-height:85%;border-radius:8px"/>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="app.js"></script>
+  <!-- add this BEFORE your app.js script -->
+  <script src="storage-shim.js"></script>
+
+</body>
+</html>

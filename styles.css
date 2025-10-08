@@ -1,0 +1,169 @@
+/* v5 styles: modern, rounded, Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+:root{
+  --bg:#f7f7fb; --card:#fff; --ink:#111827; --muted:#6b7280;
+  --pri:#4f46e5; --pri-ink:#fff; --good:#10b981; --warn:#f59e0b; --bad:#ef4444;
+  --br:14px; --pad:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 Inter, ui-sans-serif,system-ui,Segoe UI,Roboto}
+.app-header{display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(90deg,#7c3aed,#ec4899);color:#fff;flex-wrap:wrap}
+.brand{background:#ffffff22;color:#fff;width:44px;height:44px;display:grid;place-items:center;border-radius:10px;font-weight:700}
+.titles h1{margin:0;font-size:18px}.titles .subtitle{margin:2px 0 0;font-size:12px;opacity:.95}
+.top-nav{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.nav-btn{background:#ffffff22;color:#fff;border:0;padding:8px 10px;border-radius:10px;cursor:pointer}
+.nav-btn:hover{background:#ffffff44}
+.container{max-width:1100px;margin:18px auto;padding:0 14px}
+.page.hidden{display:none}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0;flex-wrap:wrap}
+.toolbar .left{display:flex;gap:8px;flex-wrap:wrap}
+.toolbar input, .toolbar select, input, textarea{padding:10px;border:1px solid #e6e7f0;border-radius:10px;background:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid #ececf5;border-radius:var(--br);padding:var(--pad);display:flex;flex-direction:column;gap:8px}
+/* 3:4 aspect ratio thumbnails */
+.thumb{aspect-ratio:3/4;background:#f4f4fb;border-radius:10px;overflow:hidden;position:relative;width:100%}
+.thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:12px;padding:3px 8px;border-radius:999px;border:1px solid #e5e7eb;background:#fff;white-space:nowrap}
+.badge.green{color:var(--good);border-color:#bbf7d0;background:#ecfdf5}
+.badge.yellow{color:var(--warn);border-color:#fde68a;background:#fffbeb}
+.badge.red{color:var(--bad);border-color:#fecaca;background:#fff7f7}
+.btn{border:1px solid transparent;background:transparent;color:var(--ink);padding:8px 10px;border-radius:10px;cursor:pointer}
+.btn:hover{filter:brightness(.97)}
+.primary{background:var(--pri);border:0;color:var(--pri-ink);box-shadow:0 6px 18px rgba(79,70,229,0.12);padding:8px 14px;border-radius:999px}
+.primary:hover{background:#3b37d0}
+.warn{background:#f59e0b;color:#fff;padding:8px 14px;border-radius:999px}
+.warn:hover{background:#d97706}
+.danger{background:#ef4444;color:#fff;padding:8px 14px;border-radius:999px}
+.danger:hover{background:#d03a3a}
+.outline{background:#fff;color:#ef4444;border:1px solid #fecaca}
+.footer-cta{display:flex;justify-content:flex-end;margin:16px 0}
+.cart-mini{margin:14px 0;padding:12px;background:#fff;border:1px solid #ececf5;border-radius:10px;position:sticky;top:16px;z-index:5}
+.list .item{background:#fff;border:1px solid #ececf5;border-radius:10px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.billing{margin-top:20px;background:#fff;border:1px solid #ececf5;border-radius:var(--br);padding:var(--pad)}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(220px,1fr));gap:12px;align-items:start}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.summary div{background:#fafafa;border:1px solid #ececf5;border-radius:10px;padding:10px;display:flex;justify-content:space-between}
+.two-col{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:900px){.two-col{grid-template-columns:1fr 1fr}}
+dialog{border:0;border-radius:12px;padding:0;max-width:720px;width:100%}
+dialog::backdrop{background:#0008}
+.dialog-form{padding:16px}
+.dialog-form h3{margin:4px 0 12px}
+.dialog-form label{display:grid;gap:6px;margin:8px 0}
+.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px;padding:12px;background:#f8fafc;border-top:1px solid #ececf5;border-radius:0 0 12px 12px}
+#bookingDetailContent{padding:16px;max-height:70vh;overflow:auto}
+.muted{color:var(--muted)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 14px;border-radius:8px;z-index:999}
+.urgent{border-left:4px solid var(--bad);padding:8px 10px;margin:8px 0;border-radius:6px;background:#fff7f7}
+.photo-row{display:flex;gap:6px;flex-wrap:wrap}
+.photo-row img{width:64px;height:64px;object-fit:cover;border-radius:6px;border:1px solid #ececf5;cursor:pointer}
+#lightbox{display:none;align-items:center;justify-content:center}
+#lightbox img{max-width:95%;max-height:85%;border-radius:8px}
+#lightbox .close{position:absolute;top:18px;right:18px;background:#fff;border-radius:999px;padding:6px 8px;cursor:pointer}
+
+
+/* v6 additions */
+#lightbox{display:none;align-items:center;justify-content:center;z-index:99999}
+#lightbox img{max-width:95%;max-height:85%;border-radius:8px}
+#lightbox .close{position:absolute;top:18px;right:18px;background:#fff;border-radius:999px;padding:6px 8px;cursor:pointer}
+
+.return-primary{background:#06b6d4;color:#fff;border-radius:999px;padding:8px 14px;border:0}
+.return-primary:hover{filter:brightness(.98)}
+
+.radio-row{display:flex;gap:10px}
+.radio-row label{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid #e9eefb;background:#fff;cursor:pointer}
+.radio-row input{appearance:none;width:14px;height:14px;border-radius:50%;border:2px solid #cbd5e1;display:inline-block;position:relative}
+.radio-row input:checked{background:var(--pri);border-color:var(--pri)}
+
+.nav-btn .dot{display:none;width:10px;height:10px;border-radius:99px;background:var(--bad);margin-left:8px;vertical-align:middle}
+
+#page-selector .cart-mini{position:sticky;top:16px;z-index:10}
+
+
+/* Urgent section product-code buttons */
+.btn.code {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn.code:hover {
+  background-color: #b30000;
+  transform: translateY(-1px);
+}
+
+.btn.code:active {
+  transform: translateY(0);
+  background-color: #800000;
+}
+
+#pickupsUrgent, #returnsUrgent {
+  padding: 8px 10px;
+  border-left: 4px solid #ff0000;
+  background: #f8faff;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+
+
+/* === Main action buttons (Pickup + Return) === */
+.btn-primary,
+button[data-action="finalize-return"],
+button[data-action="confirm-pickup"] {
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover,
+button[data-action="finalize-return"]:hover,
+button[data-action="confirm-pickup"]:hover {
+  background-color: #b30000;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active,
+button[data-action="finalize-return"]:active,
+button[data-action="confirm-pickup"]:active {
+  transform: translateY(0);
+  background-color: #800000;
+}
+
+
+
+/* Make Finalize Return button same as Confirm Pickup */
+.btn.finalize-return {
+  background-color: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 6px 16px;
+  font-weight: 400;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+}
+
+.btn.finalize-return:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn.finalize-return:active {
+  transform: translateY(0);
+  opacity: 1;
+}
